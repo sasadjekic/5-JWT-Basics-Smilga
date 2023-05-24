@@ -1,0 +1,5 @@
+1. Poenta JWT tokena je da kada se posalje frontu nakon login provere onda svaki request sa fronta mora da ima taj 
+kreirani i poslati token sa serverske strane
+2. Modul Joi - validacija
+
+5:29
