@@ -1,5 +1,16 @@
 1. Poenta JWT tokena je da kada se posalje frontu nakon login provere onda svaki request sa fronta mora da ima taj 
 kreirani i poslati token sa serverske strane
-2. Modul Joi - validacija
+2. Modul Joi - validacija. Inace tri nacina validacije - moongoose valid, Joi, check in controller
+3. Error klasu uvozimo u kontroler i pravimo pri "throw-u" novu gresku tj instancu mu ako je greska sa EM ili PW
+    a u app.js imamo uvezeni errorHandlerMiddleware koji hendluje sve greske. Proverava da li je greska
+    instanca od CustomAPIError i dalje prosleduje sta treba ili ide na server gresku
+* Nismo limitirani sto se tice validacije na mongoose samo. U ovom slucaju smo validirali u kontroleru
+4. JWT - jwt.io - izvor o tome
+    xxxxx.yyyyy.zzzzz - header, payload, signature
+    modul jsonwebtoken - za JWT na npm
+    jwt.sign() - metod koji koristimo pri loginu
+    Authorization: Bearer <token> - header u requestu ima ovo (vidimo u Network kartici)
+5. u .ENV stavljamo JWT SECRET za kreiranje tokena - neki "nepogodivi" string
+6. Browser - DEV tool - Application/Local Storage (session stor, cookies...) - Vidi se token u Local Storage
 
-5:29
+5:48
