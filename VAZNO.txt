@@ -9,8 +9,45 @@ kreirani i poslati token sa serverske strane
     xxxxx.yyyyy.zzzzz - header, payload, signature
     modul jsonwebtoken - za JWT na npm
     jwt.sign() - metod koji koristimo pri loginu
-    Authorization: Bearer <token> - header u requestu ima ovo (vidimo u Network kartici)
+    Authorization: Bearer <token> - header u requestu ima ovo (vidimo u NETWORK kartici)
 5. u .ENV stavljamo JWT SECRET za kreiranje tokena - neki "nepogodivi" string
 6. Browser - DEV tool - Application/Local Storage (session stor, cookies...) - Vidi se token u Local Storage
+7. Upucivanje POST (forma) i GET requesta sa fronta - axios modul - 
+    POST - addEventListener na formu ("submit"). Axios - metod, action, data (user, pass...) i kao rezultat
+    setovanje tokena u Local storage nakon sto smo ga dobili nakon kreiranja usera 
+    localStorage.setItem('token', data.token), plus neki podaci koji god...
+    GET - dohvatanje tokena iz localStorage i slanje Headera: Authorization: Bearer sa tokenom u GET-u
+        isto destruktuiranje dobijenih podataka u data. Fetch je slicno
+POSTMAN proba ovoga:
+    POST /login - Body (JSON - user, pass) - Response - Token,... (dobrodosao, evo token...)
+    GET /dashboard - Headers (Authorisation, Bearer,token) -  data... (jer smo autothorizovani tokenom) 
+8. console.log(req.headers) - tu se nalazi headers  - u kontroleru kao prikaz samog objekta
+9. Authorisation - u kontroleru - provera ima li authorization headera i 
+10. verifikacija da li je secret deo vezano 
+    za signature validan - sa jwt.verify(token, process.env.JWT_SECRET) - na osnovu SECRETA koji cuvamo na serveru
+    u ENV varijabli
+    U oba slucaja koristimo CustomAPIError koju smo napravili pa filujemo odgovarajucim tekstom za svaku gresku
+    401 - nisi autorizovan, a 400 je los request npr
+11. Token
+    Ovo smo koristili da kreiramo token pri logovanju:
+    - const token = jwt.sign({id, username}, process.env.JWT_SECRET, {expiresIn: '30d'})
+    Ovo dobijemo pri dekodovanju pri verifikaciji a na onsovu ovog sto smo i poslali
+    - const decode = jwt.verify(token, process.env.JWT_SECRET)
+        console.log(decode) //{ id: 28, username: 'a', iat: 1685308222, exp: 1687900222 } 
+        param1, param2, vaznost vremenska tokena
+Posto je token smesten u localStorage, dok god je validan tj nije istekao sa njim pristupamo 
+putanjama koje zahtevaju autorizaciju. Mi taj token mozemo rucno da izbrisemo u browseru /appl. kartica
+12. Naravno ovo za autentikaciju i verifikaciju tj autorizaciju prebacujemo u Midleware radi koriscenja za vise rezultat
+- MD/auth - u njemu obavezno idemo sa next() da pokrenuli sledecu MD ili CB funkciju
+//VAZNO - Bitan je redosled funkcija. Po tom redu se izvrsavaju I MD funkcije moraju u sebi da imaju NEXT()!!!
+router.route('/dashboard').get(authorizationMiddleware, dashboard)
+    Takodje, koristimo REQ objekat kao nosioca podataka ka drugim MD i CB funkcijama
+    //DODATO PRI PREBACIVANJU U AUTH.JS
+       const {id, username} = decoded;
+       //BITNA STVAR!!! - PRENOSIMO REZULTAT U DRUGU FUNKCIJU PREKO REQ objekta jer sve func imaju pristup njemu!
+       req.user = {id, username};
+       next()
+13. Errors - pravimo posebne klase za posebne greske
+- u errors folderu pravimo jos 3 fajla i izvodimo klase iz nase CustomApi klase
 
-5:48
+6:18

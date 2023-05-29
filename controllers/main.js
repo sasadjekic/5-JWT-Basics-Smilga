@@ -32,8 +32,38 @@ const login = async (req, res) => {
 }
 
 const dashboard = async (req, res) => {
-    const luckyNumber = Math.floor(Math.random() * 100)
-    res.status(200).json({msg: `Hello, John Doe`, secret: `Here is your authorized data, your lucky number is ${luckyNumber}`})
+    // console.log(req.headers)  - SVE PREBACENO U MD auth.js!
+    // //Authorization
+    // const authHeader = req.headers.authorization;
+
+    // if(!authHeader || !authHeader.startsWith('Bearer ')) {
+    //     throw new CustomAPIError('No token provided', 401);
+    // }
+    // //token sam, iz header-a
+    // const token = authHeader.split(' ')[1]
+    // console.log(token)
+
+    // //Verifikacija tokena - vise nacina 
+    // try {
+    //    const decode = jwt.verify(token, process.env.JWT_SECRET) // ovo kao za probu da test padne "rf"
+    //    console.log(decode) //{ id: 28, username: 'a', iat: 1685308222, exp: 1687900222 } 
+    //    //a na osnovu ovog sto smo koristili da kreiramo token 
+    //    //const token = jwt.sign({id, username}, process.env.JWT_SECRET, {expiresIn: '30d'})
+    //    const luckyNumber = Math.floor(Math.random() * 100)
+    //     res.status(200).json({msg: `Hello, ${decode.username}`, secret: `Here is your authorized data, your lucky number is ${luckyNumber}`})
+    // } catch (error) {
+    //    throw new CustomAPIError('Not authorized to access this route', 401)
+    // }
+
+    //Posto smo sve prebacili u MD u auth.js - prenosimo ovoj funkciji podatke preko REQ objekta i to preko REQ.USER
+    //tako da...
+    console.log(req.user)
+    //const user = req.user;
+    const luckyNumber = Math.floor(Math.random() * 100)  //dole: umesto decode.username ide req.user.username
+    res.status(200).json({msg: `Hello, ${req.user.username}`, secret: `Here is your authorized data, your lucky number is ${luckyNumber}`})
+
+    //const luckyNumber = Math.floor(Math.random() * 100)
+    //res.status(200).json({msg: `Hello, John Doe`, secret: `Here is your authorized data, your lucky number is ${luckyNumber}`})
 }
 
 module.exports = {

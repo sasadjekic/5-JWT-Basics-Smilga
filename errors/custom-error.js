@@ -1,7 +1,8 @@
 class CustomAPIError extends Error {
-  constructor(message, statusCode) {
+  constructor(message) { //statusCode) - ovo je izbaceno
     super(message)
-    this.statusCode = statusCode
+    //Ovo izbacujemo i pravimo posebne klase gresaka za 400 i 401
+    //this.statusCode = statusCode
   }
 }
 
