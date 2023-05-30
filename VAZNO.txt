@@ -49,5 +49,6 @@ router.route('/dashboard').get(authorizationMiddleware, dashboard)
        next()
 13. Errors - pravimo posebne klase za posebne greske
 - u errors folderu pravimo jos 3 fajla i izvodimo klase iz nase CustomApi klase
-
+14. Modul http-status-codes sa s - za status code umesto unosa brojeva
+    Zbog toga moramo a menjamo hendlere error u auth.js, controllers/main.js i error-handler middleware
 6:18

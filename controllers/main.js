@@ -2,6 +2,9 @@
 //import Error klase iz errors foldera
 const CustomAPIError = require('../errors/custom-error');
 
+//import klase Error BadReuest vezano za drugi nacin hendlovanja gresaka - samo folder bez index.js?!
+const { BadRequestError } = require('../errors')
+
 //uvoz modula jsonwebtoken za JWT
 const jwt = require('jsonwebtoken')
 
@@ -15,7 +18,10 @@ const login = async (req, res) => {
     //provera u kontroleru - OVU OPCIJU SMO OVDE IZABRALI - provera sa praznim poljima u Postmanu za email npr
     if(!username || !password) {
         //bacanje nove instance nase custom greske sa propertijima - poruka i status code
-        throw new CustomAPIError('Please provide email and password', 400)
+        //throw new CustomAPIError('Please provide email and password', 400)
+        //Ovo menjamo sa nacinom hendlovanja preko posebnih Error klasa i http-status-codes modula
+        //Dakle pozivamo tu klasu i brisemo status code jer nam netreba (vec ima u klasi)
+        throw new BadRequestError('No token provided');
     }
     //neki ID ovde neki random 
     const id = new Date().getDate()

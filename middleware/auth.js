@@ -1,6 +1,11 @@
 //import Error klase iz errors foldera
 const CustomAPIError = require('../errors/custom-error');
 
+//uvoz klase Unant... vezano za drugi nacin hendlovanja gresaka - samo folder bez index.js?!
+const { UnauthenticatedError } = require('../errors')
+//SAMO ../errors bez index.js iz kog su ujedinjenje klase izvezene?
+
+
 //uvoz modula jsonwebtoken za JWT
 const jwt = require('jsonwebtoken')
 
@@ -13,7 +18,10 @@ const authorizationMiddleware = (req, res, next) => {
     const authHeader = req.headers.authorization;
 
     if(!authHeader || !authHeader.startsWith('Bearer ')) {
-        throw new CustomAPIError('No token provided', 401);
+        //Ovo menjamo sa nacinom hendlovanja preko posebnih Error klasa i http-status-codes modula
+        //throw new CustomAPIError('No token provided', 401);
+        //Dakle pozivamo tu klasu i brisemo status code jer nam netreba (vec ima u klasi)
+        throw new UnauthenticatedError('No token provided');
     }
     //token sam, iz header-a
     const token = authHeader.split(' ')[1]
@@ -33,7 +41,8 @@ const authorizationMiddleware = (req, res, next) => {
        next()
        
     } catch (error) {
-       throw new CustomAPIError('Not authorized to access this route', 401)
+       //throw new CustomAPIError('Not authorized to access this route', 401) - isto kao gore menjamo...
+       throw new UnauthenticatedError('Not authorized to access this route') 
     }
 
 
